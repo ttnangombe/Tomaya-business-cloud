@@ -30,7 +30,15 @@ def practice_name():
 def companies_df():
     return pd.read_sql_query("SELECT * FROM companies ORDER BY id DESC", con)
 
-def pick_company():
+def pick_company(key_name="company_select"):
+    cdf = companies_df()
+    if cdf.empty:
+        st.warning("No companies yet. Add a company first.")
+        return None
+    labels = {f'{r["name"]} (ID {int(r["id"])})': int(r["id"]) for _, r in cdf.iterrows()}
+    selected = st.selectbox("Select company", list(labels.keys()), key=key_name)
+    return labels[selected]
+
     cdf = companies_df()
     if cdf.empty:
         st.warning("No companies yet. Add a company first.")
@@ -88,7 +96,11 @@ with tabs[1]:
     left, right = st.columns([1,2])
     with left:
         mode = st.radio("Action", ["Add new","Edit existing"], horizontal=True)
-        cid = pick_company() if mode == "Edit existing" else None
+        cid = pick_copick_company("company_receipts_select")
+pick_company("company_import_select")
+pick_company("company_taxpack_select")
+pick_company("company_edit_select")
+mpany() if mode == "Edit existing" else None
         row = {}
         if cid:
             df = pd.read_sql_query("SELECT * FROM companies WHERE id=?", con, params=(cid,))
