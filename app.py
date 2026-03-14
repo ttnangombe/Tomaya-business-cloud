@@ -102,8 +102,8 @@ pick_company("company_taxpack_select")
 pick_company("company_edit_select")
 mpany() if mode == "Edit existing" else None
 row = {}
-        if cid:
-            df = pd.read_sql_query("SELECT * FROM companies WHERE id=?", con, params=(cid,))
+if cid:
+    df = pd.read_sql_query("SELECT * FROM companies WHERE id=?", con, params=(cid,))
             if not df.empty:
                 row = df.iloc[0].to_dict()
         with st.form("company_form"):
